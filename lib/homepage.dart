@@ -6,6 +6,8 @@ import 'package:the_hit_times_app/notification_service/notification_service.dart
 import 'package:the_hit_times_app/smenu.dart';
 // import 'notification.dart';
 import 'bottom_nav_gallery.dart';
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+
 
 
 class MainPage extends StatefulWidget {
@@ -20,7 +22,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin{
   int _currentIndex = 1;
 
   BottomNavigationBarType _type = BottomNavigationBarType.shifting;
-  late List<NavigationIconView> _navigationViews;
+  late List<Widget> _navigationViews;
   late PageController _pageController;
 
 
@@ -32,51 +34,32 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin{
       NotificationService().show(message);
     });
 
-    _navigationViews = <NavigationIconView>[
-      NavigationIconView(
-        icon: IconTheme(
-            data: IconThemeData(
-                color: Color(0xFFdff9fb)),
-            child: Icon(Icons.menu)
-        ),
-        title: 'Menu',
+    _navigationViews = <Widget>[
+      Icon(
+        Icons.menu,
         color: Color(0xFF000000),
-        vsync: this,
+        size: 30,
       ),
-      NavigationIconView(
-        icon: IconTheme(
-            data: IconThemeData(
-                color: Color(0xFFdff9fb)),
-            child: Icon(Icons.assignment)
-        ),
-        title: 'News',
+      Icon(
+        Icons.assignment,
         color: Color(0xFF000000),
-        vsync: this,
+        size: 30,
       ),
-      NavigationIconView(
-        icon: IconTheme(
-            data: IconThemeData(
-                color: Color(0xFFdff9fb)),
-            child: Icon(Icons.info_outline)
-        ),
-        title: 'Contact Us',
+      Icon(
+        Icons.info_outline,
         color: Color(0xFF000000),
-        vsync: this,
+        size: 30,
       ),
     ];
 
-    for (NavigationIconView view in _navigationViews)
-      view.controller.addListener(_rebuild);
-
-    _navigationViews[_currentIndex].controller.value = 1.0;
+    for (Widget view in _navigationViews)
 
     _pageController = PageController(initialPage: _currentIndex);
   }
 
   @override
   void dispose() {
-    for (NavigationIconView view in _navigationViews)
-      view.controller.dispose();
+    for (Widget view in _navigationViews)
     _pageController.dispose();
     super.dispose();
   }
@@ -123,17 +106,15 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin{
 
   @override
   Widget build(BuildContext context) {
-    final BottomNavigationBar botNavBar = BottomNavigationBar(
+    final CurvedNavigationBar botNavBar = CurvedNavigationBar(
+      index: 1,
+      height: 60.0,
       items: _navigationViews
-          .map((NavigationIconView navigationView) => navigationView.item)
           .toList(),
-      currentIndex: _currentIndex,
-      type: _type,
+      backgroundColor: Colors.teal,
       onTap: (int index) {
         setState(() {
-          _navigationViews[_currentIndex].controller.reverse();
           _currentIndex = index;
-          _navigationViews[_currentIndex].controller.forward();
         });
       },
     );

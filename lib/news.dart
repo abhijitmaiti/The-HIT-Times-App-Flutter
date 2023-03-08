@@ -7,10 +7,16 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:photo_view/photo_view.dart';
 import 'package:the_hit_times_app/card_ui.dart';
+import 'package:the_hit_times_app/image_container.dart';
 // import 'card_ui.dart';
 import 'models/postmodel.dart';
 
 //import 'package:zoomable_image/zoomable_image.dart';
+
+Map<int, String> map = {
+  0: ,
+  'b': 2,
+};
 
 class News extends StatefulWidget {
   @override
@@ -66,7 +72,7 @@ class NewsState extends State<News> {
                         return InkWell(
                           onTap: () {
                             Navigator.of(context).push(MaterialPageRoute(
-                              builder: (BuildContext context) => DisplayPost(
+                              builder: (BuildContext context) => DisplayPostt(
                                     pIndex: index,
                                     /*title: data[data.length - index- 1]['title'],
                                     body: data[data.length - index- 1]['body'],
@@ -76,6 +82,7 @@ class NewsState extends State<News> {
                                     body: allPosts.posts[index].body,
                                     imgUrl: allPosts.posts[index].link,
                                     date: allPosts.posts[index].createdAt,
+                                    description: allPosts.posts[index].description,
                                 category: int.parse(
                                     allPosts.posts[index].dropdown),
                                   ),
@@ -378,6 +385,109 @@ class DisplayBody extends StatelessWidget {
             ),
           )
         ],
+      ),
+    );
+  }
+}
+// new ui
+class DisplayPostt extends StatelessWidget {
+  DisplayPostt(
+      {required this.pIndex, required this.body, required this.title, required this.imgUrl, 
+      required this.date, required this.category, required this.description});
+  final int pIndex;
+  final String body;
+  final String title;
+  final String imgUrl;
+  final String date;
+  final int category;
+  final String description;
+
+  @override
+  Widget build(BuildContext context) {
+    // return Scaffold(
+    //   appBar: AppBar(
+    //     iconTheme: IconThemeData(
+    //       color: Colors.white, //change your color here
+    //     ),
+    //     title: Text(
+    //         'The HIT Times',
+    //         style: TextStyle(
+    //           color: Colors.white
+    //         ),
+    //     ),
+    //     centerTitle: true,
+    //   ),
+    //   body: InkWell(
+    //     /*onDoubleTap: () {
+    //       Navigator.pop(context);
+    //     },*/
+    //     child: ImageScroll(
+    //       title: title,
+    //       body: body,
+    //       imgUrl: imgUrl,
+    //       date: date,
+    //         category: category
+    //     ),
+    //   ),
+    // );
+    return ImageContainer(
+      width: double.infinity,
+      imageUrl: imgUrl,
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          iconTheme: const IconThemeData(color: Colors.white),
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          ),
+          body: ListView(
+            children: [
+              NewsHeadline(title: title,date: date,)
+            ],
+          ),
+      ),
+    );
+  }
+}
+
+class NewsHeadline extends StatelessWidget {
+  const NewsHeadline({
+    Key? key,
+    required this.title,
+    required this.date,
+  }) : super(key: key);
+
+  final String title;
+  final String date;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+
+        children: [
+        Text(
+          title,
+          textAlign: TextAlign.left,
+          style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+            height: 1.25,
+          ),
+        ),
+        const SizedBox(height: 10),
+        Text(
+          date.substring(0,10),
+          textAlign: TextAlign.right,
+          style: Theme.of(context).textTheme.headline6!.copyWith(
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+            height: 1.25,
+          ),
+        ),
+      ],
       ),
     );
   }
